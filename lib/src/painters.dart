@@ -36,6 +36,9 @@ class HourLinePainter extends CustomPainter {
   /// Line dash space width when using the [LineStyle.dashed] style
   final double dashSpaceWidth;
 
+  /// Emulates offset of vertical line from hour line starts.
+  final double emulateVerticalOffsetBy;
+
   /// Paints 24 hour lines.
   HourLinePainter({
     required this.lineColor,
@@ -47,6 +50,7 @@ class HourLinePainter extends CustomPainter {
     this.lineStyle = LineStyle.solid,
     this.dashWidth = 4,
     this.dashSpaceWidth = 4,
+    this.emulateVerticalOffsetBy = 0,
   });
 
   @override
@@ -58,7 +62,7 @@ class HourLinePainter extends CustomPainter {
     for (var i = 1; i < Constants.hoursADay; i++) {
       final dy = i * minuteHeight * 60;
       if (lineStyle == LineStyle.dashed) {
-        var startX = offset;
+        var startX = offset + emulateVerticalOffsetBy;
         while (startX < size.width) {
           canvas.drawLine(
               Offset(startX, dy), Offset(startX + dashWidth, dy), paint);
@@ -155,7 +159,7 @@ class HalfHourLinePainter extends CustomPainter {
             lineHeight != oldDelegate.lineHeight ||
             minuteHeight != oldDelegate.minuteHeight);
   }
-} 
+}
 
 //using HalfHourIndicatorSettings for this too
 class QuarterHourLinePainter extends CustomPainter {
@@ -236,7 +240,6 @@ class QuarterHourLinePainter extends CustomPainter {
             minuteHeight != oldDelegate.minuteHeight);
   }
 }
-
 
 /// Paints a single horizontal line at [offset].
 class CurrentTimeLinePainter extends CustomPainter {

@@ -178,7 +178,7 @@ class WeekView<T extends Object?> extends StatefulWidget {
   final MinuteSlotSize minuteSlotSize;
 
   /// Style for WeekView header.
-  final HeaderStyle headerStyle;  
+  final HeaderStyle headerStyle;
 
   /// Option for SafeArea.
   final SafeAreaOption safeAreaOption;
@@ -186,57 +186,61 @@ class WeekView<T extends Object?> extends StatefulWidget {
   /// Display full day event builder.
   final FullDayEventBuilder<T>? fullDayEventBuilder;
 
-  ///Show half hour indicator 
-  final bool showHalfHours; 
+  ///Show half hour indicator
+  final bool showHalfHours;
 
-  ///Show quarter hour indicator 
+  ///Show quarter hour indicator
   final bool showQuarterHours;
 
+  ///Emulates offset of vertical line from hour line starts.
+  final double emulateVerticalOffsetBy;
+
   /// Main widget for week view.
-  const WeekView({
-    Key? key,
-    this.controller,
-    this.eventTileBuilder,
-    this.pageTransitionDuration = const Duration(milliseconds: 300),
-    this.pageTransitionCurve = Curves.ease,
-    this.heightPerMinute = 1,
-    this.timeLineOffset = 0,
-    this.showLiveTimeLineInAllDays = false,
-    this.width,
-    this.minDay,
-    this.maxDay,
-    this.initialDay,
-    this.hourIndicatorSettings,
-    this.halfHourIndicatorSettings,
-    this.timeLineBuilder,
-    this.timeLineWidth,
-    this.liveTimeIndicatorSettings,
-    this.onPageChange,
-    this.weekPageHeaderBuilder,
-    this.eventArranger,
-    this.weekTitleHeight = 50,
-    this.weekDayBuilder,
-    this.weekNumberBuilder,
-    this.backgroundColor = Colors.white,
-    this.scrollOffset = 0.0,
-    this.onEventTap,
-    this.onDateLongPress,
-    this.onDateTap,
-    this.weekDays = WeekDays.values,
-    this.showWeekends = true,
-    this.startDay = WeekDays.monday,
-    this.minuteSlotSize = MinuteSlotSize.minutes60,
-    this.weekDetectorBuilder,
-    this.headerStringBuilder,
-    this.timeLineStringBuilder,
-    this.weekDayStringBuilder,
-    this.weekDayDateStringBuilder,
-    this.headerStyle = const HeaderStyle(),
-    this.safeAreaOption = const SafeAreaOption(),
-    this.fullDayEventBuilder,
-    this.showHalfHours = false, 
-    this.showQuarterHours = false,
-  })  : assert((timeLineOffset) >= 0,
+  const WeekView(
+      {Key? key,
+      this.controller,
+      this.eventTileBuilder,
+      this.pageTransitionDuration = const Duration(milliseconds: 300),
+      this.pageTransitionCurve = Curves.ease,
+      this.heightPerMinute = 1,
+      this.timeLineOffset = 0,
+      this.showLiveTimeLineInAllDays = false,
+      this.width,
+      this.minDay,
+      this.maxDay,
+      this.initialDay,
+      this.hourIndicatorSettings,
+      this.halfHourIndicatorSettings,
+      this.timeLineBuilder,
+      this.timeLineWidth,
+      this.liveTimeIndicatorSettings,
+      this.onPageChange,
+      this.weekPageHeaderBuilder,
+      this.eventArranger,
+      this.weekTitleHeight = 50,
+      this.weekDayBuilder,
+      this.weekNumberBuilder,
+      this.backgroundColor = Colors.white,
+      this.scrollOffset = 0.0,
+      this.onEventTap,
+      this.onDateLongPress,
+      this.onDateTap,
+      this.weekDays = WeekDays.values,
+      this.showWeekends = true,
+      this.startDay = WeekDays.monday,
+      this.minuteSlotSize = MinuteSlotSize.minutes60,
+      this.weekDetectorBuilder,
+      this.headerStringBuilder,
+      this.timeLineStringBuilder,
+      this.weekDayStringBuilder,
+      this.weekDayDateStringBuilder,
+      this.headerStyle = const HeaderStyle(),
+      this.safeAreaOption = const SafeAreaOption(),
+      this.fullDayEventBuilder,
+      this.showHalfHours = false,
+      this.showQuarterHours = false,
+      this.emulateVerticalOffsetBy = 10.0})
+      : assert((timeLineOffset) >= 0,
             "timeLineOffset must be greater than or equal to 0"),
         assert(width == null || width > 0,
             "Calendar width must be greater than 0."),
@@ -270,7 +274,7 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
 
   late EventArranger<T> _eventArranger;
 
-  late HourIndicatorSettings _hourIndicatorSettings; 
+  late HourIndicatorSettings _hourIndicatorSettings;
   late HourIndicatorSettings _halfHourIndicatorSettings;
   late HourIndicatorSettings _liveTimeIndicatorSettings;
 
@@ -431,7 +435,8 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
                             eventTileBuilder: _eventTileBuilder,
                             heightPerMinute: widget.heightPerMinute,
                             hourIndicatorSettings: _hourIndicatorSettings,
-                            halfHourIndicatorSettings: _halfHourIndicatorSettings,
+                            halfHourIndicatorSettings:
+                                _halfHourIndicatorSettings,
                             dates: dates,
                             showLiveLine: widget.showLiveTimeLineInAllDays ||
                                 _showLiveTimeIndicator(dates),
@@ -447,8 +452,10 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
                             minuteSlotSize: widget.minuteSlotSize,
                             scrollConfiguration: _scrollConfiguration,
                             fullDayEventBuilder: _fullDayEventBuilder,
-                            showHalfHours: widget.showHalfHours, 
+                            showHalfHours: widget.showHalfHours,
                             showQuarterHours: widget.showQuarterHours,
+                            emulateVerticalOffsetBy:
+                                widget.emulateVerticalOffsetBy,
                           ),
                         );
                       },
@@ -527,8 +534,8 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
         (_width - _timeLineWidth - _hourIndicatorSettings.offset) /
             _totalDaysInWeek;
 
-    _halfHourIndicatorSettings = widget.halfHourIndicatorSettings ?? 
-      HourIndicatorSettings(
+    _halfHourIndicatorSettings = widget.halfHourIndicatorSettings ??
+        HourIndicatorSettings(
           height: widget.heightPerMinute,
           color: Constants.defaultBorderColor,
           offset: 5,
