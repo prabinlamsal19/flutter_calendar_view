@@ -163,6 +163,14 @@ class DayView<T extends Object?> extends StatefulWidget {
   /// then DateTime object will be  DateTime(2022,01,11,1,0)
   final DateTapCallback? onDateTap;
 
+  /// This callback will have a date parameter which
+  /// will provide the time span on which drag down has begun
+  final DragDownStartCallback? onDragDownStart;
+
+  /// This callback will have a date parameter which
+  /// will provide the time span on which drag down has ended
+  final DragDownEndCallback? onDragDownEnd;
+
   /// Defines size of the slots that provides long press callback on area
   /// where events are not there.
   final MinuteSlotSize minuteSlotSize;
@@ -185,7 +193,7 @@ class DayView<T extends Object?> extends StatefulWidget {
   /// Show half hour indicator
   final bool showHalfHours;
 
-  /// Show quarter hour indicator 
+  /// Show quarter hour indicator
   final bool showQuarterHours;
 
   /// Duration from where default day view will be visible
@@ -222,6 +230,8 @@ class DayView<T extends Object?> extends StatefulWidget {
     this.onEventTap,
     this.onDateLongPress,
     this.onDateTap,
+    this.onDragDownStart,
+    this.onDragDownEnd,
     this.minuteSlotSize = MinuteSlotSize.minutes60,
     this.headerStyle = const HeaderStyle(),
     this.fullDayEventBuilder,
@@ -416,6 +426,8 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                             onTileTap: widget.onEventTap,
                             onDateLongPress: widget.onDateLongPress,
                             onDateTap: widget.onDateTap,
+                            onDragDownStart: widget.onDragDownStart,
+                            onDragDownEnd: widget.onDragDownEnd,
                             showLiveLine: widget.showLiveTimeLineInAllDays ||
                                 date.compareWithoutTime(DateTime.now()),
                             timeLineOffset: widget.timeLineOffset,

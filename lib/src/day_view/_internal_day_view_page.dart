@@ -82,6 +82,10 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
   /// then DateTime object will be  DateTime(2022,01,11,1,0)
   final DateTapCallback? onDateTap;
 
+  final DragDownStartCallback? onDragDownStart;
+
+  final DragDownEndCallback? onDragDownEnd;
+
   /// Defines size of the slots that provides long press callback on area
   /// where events are not there.
   final MinuteSlotSize minuteSlotSize;
@@ -125,6 +129,8 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
     required this.onTileTap,
     required this.onDateLongPress,
     required this.onDateTap,
+    required this.onDragDownStart,
+    required this.onDragDownEnd,
     required this.minuteSlotSize,
     required this.scrollNotifier,
     required this.fullDayEventBuilder,

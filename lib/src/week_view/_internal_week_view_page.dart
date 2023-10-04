@@ -105,6 +105,8 @@ class InternalWeekViewPage<T extends Object?> extends StatelessWidget {
   /// then DateTime object will be  DateTime(2022,01,11,1,0)
   final DateTapCallback? onDateTap;
 
+  ///This callback will have stardDate and endDate parameters which
+  ///will provide the start and end date coordinates of the drag
   /// Defines size of the slots that provides long press callback on area
   /// where events are not there.
   final MinuteSlotSize minuteSlotSize;

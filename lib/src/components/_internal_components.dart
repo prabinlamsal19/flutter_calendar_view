@@ -333,6 +333,11 @@ class PressDetector extends StatelessWidget {
   /// then DateTime object will be  DateTime(2022,01,11,1,0)
   final DateTapCallback? onDateTap;
 
+  ///Called when user drags on calendar
+  final DragDownStartCallback? onDragDownStart;
+
+  final DragDownEndCallback? onDragDownEnd;
+
   /// Defines size of the slots that provides long press callback on area
   /// where events are not available.
   final MinuteSlotSize minuteSlotSize;
@@ -346,6 +351,8 @@ class PressDetector extends StatelessWidget {
     required this.date,
     required this.onDateLongPress,
     required this.onDateTap,
+    required this.onDragDownStart,
+    required this.onDragDownEnd,
     required this.minuteSlotSize,
   }) : super(key: key);
 
@@ -376,6 +383,20 @@ class PressDetector extends StatelessWidget {
                     minuteSlotSize.minutes * i,
                   ),
                 ),
+                onVerticalDragDown: (details) => onDragDownStart?.call(DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  0,
+                  minuteSlotSize.minutes * i,
+                )),
+                onVerticalDragEnd: (details) => onDragDownEnd?.call(DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  0,
+                  minuteSlotSize.minutes * i,
+                )),
                 onLongPress: () => onDateLongPress?.call(
                   DateTime(
                     date.year,
