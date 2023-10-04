@@ -606,6 +606,22 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                     minuteSlotSize.minutes * i,
                   ),
                 ),
+                onVerticalDragDown: (details) =>
+                    widget.onDragDownStart?.call(DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  0,
+                  minuteSlotSize.minutes * i,
+                )),
+                onVerticalDragEnd: (details) =>
+                    widget.onDragDownEnd?.call(DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  0,
+                  minuteSlotSize.minutes * i,
+                )),
                 child: SizedBox(width: width, height: heightPerSlot),
               ),
             ),
