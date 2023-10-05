@@ -634,9 +634,6 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                         (minuteSlotSize.minutes * (i + delta_i))));
                   },
                   onVerticalDragEnd: (details) {
-                    DragEndDetails(
-                        velocity: Velocity(pixelsPerSecond: Offset(1, 1)),
-                        primaryVelocity: 2);
                     return widget.onDragDownEnd?.call(DateTime(
                         date.year,
                         date.month,
