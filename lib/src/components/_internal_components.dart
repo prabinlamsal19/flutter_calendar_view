@@ -395,10 +395,11 @@ class PressDetector extends StatelessWidget {
                 )),
                 onVerticalDragUpdate: (details) {
                   final int delta_i =
-                      (details.primaryDelta! / heightPerSlot).round();
+                      (details.delta.dy/ heightPerSlot).round();
                   return onDragDownEnd?.call(DateTime(date.year, date.month,
                       date.day, 0, (minuteSlotSize.minutes * (i + delta_i))));
                 },
+
                 onVerticalDragEnd: (details) => onDragDownEnd?.call(DateTime(
                   date.year,
                   date.month,

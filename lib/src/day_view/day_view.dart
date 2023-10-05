@@ -625,7 +625,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                   },
                   onVerticalDragUpdate: (details) {
                     final int delta_i =
-                        (details.primaryDelta! / heightPerSlot).round();
+                        (details.delta.dy / heightPerSlot).round();
                     return widget.onDragDownEnd?.call(DateTime(
                         date.year,
                         date.month,
