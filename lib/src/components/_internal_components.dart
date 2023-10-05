@@ -334,9 +334,11 @@ class PressDetector extends StatelessWidget {
   final DateTapCallback? onDateTap;
 
   ///Called when user drags on calendar
-  final DragDownStartCallback? onDragDownStart;
+  final DragDownCallback? onDragDownStart;
 
-  final DragDownEndCallback? onDragDownEnd;
+  final DragDownCallback? onDragDownEnd;
+
+  final DragDownCallback? onDragDownUpdate;
 
   /// Defines size of the slots that provides long press callback on area
   /// where events are not available.
@@ -353,6 +355,7 @@ class PressDetector extends StatelessWidget {
     required this.onDateTap,
     required this.onDragDownStart,
     required this.onDragDownEnd,
+    required this.onDragDownUpdate,
     required this.minuteSlotSize,
   }) : super(key: key);
 

@@ -165,11 +165,15 @@ class DayView<T extends Object?> extends StatefulWidget {
 
   /// This callback will have a date parameter which
   /// will provide the time span on which drag down has begun
-  final DragDownStartCallback? onDragDownStart;
+  final DragDownCallback? onDragDownStart;
 
   /// This callback will have a date parameter which
   /// will provide the time span on which drag down has ended
-  final DragDownEndCallback? onDragDownEnd;
+  final DragDownCallback? onDragDownEnd;
+
+  /// This callback will have a date parameter which
+  /// will provide the time span on which drag down has been updated
+  final DragDownCallback? onDragDownUpdate;
 
   /// Defines size of the slots that provides long press callback on area
   /// where events are not there.
@@ -232,6 +236,7 @@ class DayView<T extends Object?> extends StatefulWidget {
     this.onDateTap,
     this.onDragDownStart,
     this.onDragDownEnd,
+    this.onDragDownUpdate,
     this.minuteSlotSize = MinuteSlotSize.minutes60,
     this.headerStyle = const HeaderStyle(),
     this.fullDayEventBuilder,
@@ -428,6 +433,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                             onDateTap: widget.onDateTap,
                             onDragDownStart: widget.onDragDownStart,
                             onDragDownEnd: widget.onDragDownEnd,
+                            onDragDownUpdate: widget.onDragDownUpdate,
                             showLiveLine: widget.showLiveTimeLineInAllDays ||
                                 date.compareWithoutTime(DateTime.now()),
                             timeLineOffset: widget.timeLineOffset,
@@ -574,6 +580,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
   }) {
     final heightPerSlot = minuteSlotSize.minutes * heightPerMinute;
     final slots = (Constants.hoursADay * 60) ~/ minuteSlotSize.minutes;
+    late Offset globalStartPosition;
 
     return Container(
       height: height,
@@ -587,43 +594,57 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
               right: 0,
               bottom: height - (heightPerSlot * (i + 1)),
               child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onLongPress: () => widget.onDateLongPress?.call(
-                  DateTime(
-                    date.year,
-                    date.month,
-                    date.day,
-                    0,
-                    minuteSlotSize.minutes * i,
-                  ),
-                ),
-                onTap: () => widget.onDateTap?.call(
-                  DateTime(
-                    date.year,
-                    date.month,
-                    date.day,
-                    0,
-                    minuteSlotSize.minutes * i,
-                  ),
-                ),
-                onVerticalDragDown: (details) =>
-                    widget.onDragDownStart?.call(DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  0,
-                  minuteSlotSize.minutes * i,
-                )),
-                onVerticalDragEnd: (details) =>
-                    widget.onDragDownEnd?.call(DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  0,
-                  minuteSlotSize.minutes * i,
-                )),
-                child: SizedBox(width: width, height: heightPerSlot),
-              ),
+                  behavior: HitTestBehavior.translucent,
+                  onLongPress: () => widget.onDateLongPress?.call(
+                        DateTime(
+                          date.year,
+                          date.month,
+                          date.day,
+                          0,
+                          minuteSlotSize.minutes * i,
+                        ),
+                      ),
+                  onTap: () => widget.onDateTap?.call(
+                        DateTime(
+                          date.year,
+                          date.month,
+                          date.day,
+                          0,
+                          minuteSlotSize.minutes * i,
+                        ),
+                      ),
+                  onVerticalDragDown: (details) {
+                    globalStartPosition = details.globalPosition;
+                    return widget.onDragDownStart?.call(DateTime(
+                      date.year,
+                      date.month,
+                      date.day,
+                      0,
+                      minuteSlotSize.minutes * i,
+                    ));
+                  },
+                  onVerticalDragUpdate: (details) {
+                    final int delta_i =
+                        (details.primaryDelta! / heightPerSlot).round();
+                    return widget.onDragDownEnd?.call(DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                        0,
+                        (minuteSlotSize.minutes * (i + delta_i))));
+                  },
+                  onVerticalDragEnd: (details) {
+                    DragEndDetails(
+                        velocity: Velocity(pixelsPerSecond: Offset(1, 1)),
+                        primaryVelocity: 2);
+                    return widget.onDragDownEnd?.call(DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                        0,
+                        (minuteSlotSize.minutes * (i))));
+                  },
+                  child: SizedBox(width: width, height: heightPerSlot)),
             ),
         ],
       ),
